@@ -1,28 +1,30 @@
 services:
   backend1:
-    build:
-      context: ./backend
+    image: ghcr.io/frenzywall/metrics_pythonslim:latest
     container_name: backend1
     environment:
       - INSTANCE_ID=1
+      - TZ=Asia/Kolkata
     networks:
       - app-network
+    volumes:
+      - shared:/confs
 
   backend2:
-    build:
-      context: ./backend
+    image: ghcr.io/frenzywall/metrics_pythonslim:latest
     container_name: backend2
     environment:
       - INSTANCE_ID=2
+      - TZ=Asia/Kolkata
     networks:
       - app-network
 
   backend3:
-    build:
-      context: ./backend
+    image: ghcr.io/frenzywall/metrics_pythonslim:latest
     container_name: backend3
     environment:
       - INSTANCE_ID=3
+      - TZ=Asia/Kolkata
     networks:
       - app-network
 
@@ -32,10 +34,16 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - shared:/etc/nginx/
     networks:
       - app-network
+    environment:
+      - TZ=Asia/Kolkata
+    restart: always
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  shared:
